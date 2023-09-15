@@ -1,0 +1,157 @@
+---
+title: "Problem Set 1"
+subtitle: "Due date: 18 September"
+format: pdf
+editor: visual
+execute: 
+  echo: true
+---
+
+```{r}
+
+library(tidyverse)
+library(poliscidata)
+```
+
+Please upload your completed assignment to the ELMs course site (under the assignments menu). Remember to include an annotated script file for all work with R and show your math for all other problems (if applicable, or necessary). Please also upload your completed assignment to the Github repository that you have shared with us. *We should be able to run your script with no errors.*
+
+**Total points: 25**
+
+## Question 1
+
+*Points: 5*
+
+Using the `gss` dataset (which has survey data with the individual respondent as the unit of analysis), create a frequency distribution and bar chart for each of the following variables: `degree` and `partyid_3`. Describe the distribution of each variable in detail.
+
+::: callout-note
+The `gss` dataset can be found in `poliscidata::gss`. Take a look at `?gss` to see what these variables measure.
+:::
+
+```{r}
+degree_data <- select(poliscidata::gss, degree)
+
+degree <- table(degree_data)
+
+barplot(degree, main = "Frequency of Degree", xlab = "Degree", ylab = "Frequency")
+
+summary(degree)
+```
+
+ANSWER: The highest number in the distribution is from people with HS diplomas
+
+```{r}
+partyid_data <- select(poliscidata::gss, partyid_3)
+
+partyid <- table(partyid_data)
+
+barplot(partyid, main = "Frequency of partyid", xlab = "partyid", ylab = "Frequency")
+
+summary(partyid)
+```
+
+ANSWER: The distribution describes the party ID of voters, in this frequency table, the independents have the highest number.
+
+## Question 2
+
+Examine the following vector of (fake) student IQ test scores:
+
+```{r}
+iq <- c(
+  145, 139, 126, 122, 125, 130, 96, 110, 118, 118, 101, 142, 134, 124, 112, 109, 
+  134, 113, 81, 113, 123, 94, 100, 136, 109, 131, 117, 110, 127, 124, 106, 124, 
+  115, 133, 116, 102, 127, 117, 109, 137, 117, 90, 103, 114, 139, 101, 122, 105, 
+  97, 89, 102, 108, 110, 128, 114, 112, 114, 102, 82, 101
+)
+```
+
+### Part A
+
+*Points: 5*
+
+Find the five-number summary, mean, and standard deviation for these data. Also, are there any suspected outliers in the distribution? If so, what are they and how do you know?
+
+```{r}
+summary(iq)
+iq_sd <- sd(iq)
+iq_sd
+
+mean(iq)
+sd(iq)
+
+iq.df <- data.frame(iq)
+
+ggplot(iq.df, aes(x = "", y = iq)) +
+  geom_boxplot(fill = "black") +
+  labs(title = "iq boxplot", y = "Student Scores") +
+  theme_minimal()
+
+boxplot.stats(iq)$out
+
+outlier <- boxplot.stats(iq)$out
+```
+
+ANSWER: SD: 14.80 MEAN: 114.98
+
+ANSWER: According to the presented the box plot there seems to be no *suspected* outliers.
+
+### Part B
+
+*Points: 5*
+
+In large populations, IQ scores are standardized to have a mean of 100 and a standard deviation of 15. In what way does the distribution among these students differ from the overall population?
+
+```{r}
+mean <- mean(iq)
+
+sd <- sd(iq)
+
+standard <- (iq - mean)/sd * 15 + 100 
+
+barplot(iq, main = "IQ scores", xlab = "student scores", ylab = "mean") 
+
+
+```
+
+ANSWER: The distribution in this barplot is a bit hard to see but I believe that the distribution with these students differ from the overall population because their IQ is a bit higher. Testing/scores can be dependent on environmental conditions that are not taken into account (noise, test anxiety, sleep etc).
+
+## Question 3
+
+*Points: 5*
+
+A polling firm is interested in determining how different characteristics of an individual affect vote choice. They record the following characteristics for each survey respondent - race, age, household income, and party affiliation. What "type" of variable does each characteristic most likely represent?
+
+ANSWER: Race is the categorical variable
+
+Age is the continuous variable
+
+Household income is the continuous
+
+Party affiliation is the Categorical
+
+## Question 4
+
+*Points: 5*
+
+Using the `states` dataset (the unit of analysis is each U.S. state), generate a box plot and density curve for each of the `vep12_turnout` and `cig_tax12` variables. Describe the distribution of each variable in detail.
+
+::: callout-note
+The `states` data set can be found in `poliscidata::states`. Take a look at `?states` to see what these variables measure.
+:::
+
+```{r}
+poliscidata::states
+boxplot(states$vep12_turnout)
+boxplot(states$cig_tax12)
+plot(density(states$cig_tax12))
+plot(density(states$vep12_turnout))
+
+?states
+```
+
+Percent turnout of voting eligible population (2012)
+
+-   The density curve shows a normal distribution
+
+Cigarette tax per pack (2012)
+
+-   The density curve shows a skewed right distribution
