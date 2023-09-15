@@ -125,3 +125,11 @@ plot(density(states$vep12_turnout))
 
 ?states
 ```
+
+Percent turnout of voting eligible population (2012)
+
+-   The density curve shows a normal distribution
+
+Cigarette tax per pack (2012)
+
+-   The density curve shows a skewed right distribution
