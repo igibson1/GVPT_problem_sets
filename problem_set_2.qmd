@@ -1,20 +1,28 @@
 ---
 title: "Problem Set 2"
 subtitle: "Due date: 25 September"
-format: 
-  html:
-    self-contained: true
-toc: true
+format: pdf
 editor: visual
 execute: 
-  echo: false
-  warning: false
-  message: false
+  echo: true
 ---
 
 Please upload your completed assignment to the ELMs course site (under the assignments menu). Remember to include an annotated script file for all work with R and show your math for all other problems (if applicable, or necessary). Please also upload your completed assignment to the Github repository that you have shared with us. *We should be able to run your script with no errors.*
 
 **Total points: 30**
+
+```{r}
+library(tidyverse)
+library(states)
+library(poliscidata)
+library(ggplot2)
+library(wbstats)
+library(countrycode)
+library(broom)
+library(janitor)
+library(ggridges)
+library(modelsummary)
+```
 
 ## Question 1
 
@@ -26,11 +34,54 @@ Using the `states` data, produce a scatterplot of the variables `womleg_2015` an
 The `states` data set can be found in `poliscidata::states`. Take a look at `?states` to see what these variables measure.
 :::
 
+```{r}
+# Scatterplot 
+ggplot(data = states, aes(x = libpct_m, y = womleg_2015)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE) +
+  labs(
+    title = "Scatterplot",
+    x = " Frequency Mass Public Liberal",
+    y = "Women Legislator in 2015"
+  )
+ cor(states$womleg_2015, states$libpct_m)
+```
+
+ANSWER: Correlation equation:
+
+$$Y= \beta_0+\beta_1(x)$$
+
+Y = womleg_2015 + 0.6088(libpct_m)
+
+Scatter plot description: There are some outliers that we cannot explain on the scatter plot
+
 ## Question 2
 
 *Points: 5*
 
 Regress `womleg_2015` (as the dependent variable) on `libpct_m` and report the results in a professionally formatted table. Write the model equation with the estimated coefficients and interpret them. What does the value of $R^2$ tell us about this model?
+
+Model equation: Y = womleg_2015 + (libpct_m)(x)
+
+$$Y = 1.53 + 1.15(libpct_m)$$
+
+```{r}
+regress_m_1 <- lm(womleg_2015 ~ libpct_m, states)
+regress_m_1
+
+modelsummary(
+  regress_m_1, 
+  statistic = NULL,
+  coef_rename = c("libpct_m" = "Public_liberal"),
+  gof_map = "nobs"
+)
+
+summary(regress_m_1)
+
+glance(regress_m_1)
+```
+
+ANSWER: R squared is around .3707, which shows us a relatively weak relationship with the regression model and won't be able describe our dependent variable with confidence.
 
 ## Question 3
 
@@ -41,6 +92,35 @@ Based on this regression, find the predicted value, the observed value, and comp
 ::: callout-tip
 Think RSS.
 :::
+
+```{r}
+regress_m_1
+tidy(regress_m_1)
+
+regress_m_1_cg <- tidy(regress_m_1)
+
+augment(regress_m_1)
+
+beta_0 <- regress_m_1_cg |>
+  filter(term == "(Intercept)") |>
+  pull(estimate)
+
+beta_0
+
+beta_1 <- regress_m_1_cg |>
+  filter(term == "libpct_m") |>
+  pull(estimate)
+beta_1
+
+?state
+states |>
+  filter(stateid%in%c("CO    ", "GA    ")) |>
+  select(stateid, libpct_m)
+
+#predicted value
+
+beta_0 + beta_1 * 21.67878
+```
 
 ## Question 4
 
