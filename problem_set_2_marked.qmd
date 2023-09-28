@@ -1,15 +1,27 @@
 ---
 title: "Problem Set 2"
 subtitle: "Due date: 25 September"
-format: pdf
+format: 
+  html:
+    self-contained: true
 editor: visual
 execute: 
   echo: true
+  message: false
+  warning: false
 ---
 
 Please upload your completed assignment to the ELMs course site (under the assignments menu). Remember to include an annotated script file for all work with R and show your math for all other problems (if applicable, or necessary). Please also upload your completed assignment to the Github repository that you have shared with us. *We should be able to run your script with no errors.*
 
 **Total points: 30**
+
+::: {.callout-tip title="HG comments"}
+Well done! 24/30
+:::
+
+::: {.callout-tip title="HG comments"}
+Great script management: good to put them up front. Just remember to only load in the packages you will use this session. 
+:::
 
 ```{r}
 library(tidyverse)
@@ -27,6 +39,10 @@ library(modelsummary)
 ## Question 1
 
 *Points: 5*
+
+::: {.callout-tip title="HG comments"}
+4/5
+:::
 
 Using the `states` data, produce a scatterplot of the variables `womleg_2015` and `libpct_m` (with `womleg_2015` as the dependent variable on the y-axis). Describe the scatterplot and include a copy of it. Note any suspected outliers, if any (a visual inspection will suffice for this question). Lastly, give the general equation for the correlation between `womleg_2015` and `libpct_m` (include as much information as possible), but do not solve it.
 
@@ -47,15 +63,52 @@ ggplot(data = states, aes(x = libpct_m, y = womleg_2015)) +
  cor(states$womleg_2015, states$libpct_m)
 ```
 
+::: {.callout-tip title="HG comments"}
+Nice graph! Be careful with your labelling. `libpct_m` is provided in percentage points, not frequency. 
+:::
+
 ANSWER: Correlation equation:
+
+$$
+r=\sum((x_1 - x)/s_x)((y_i-y)/s_y)
+/(n-1)
+$$
+
+::: {.callout-tip title="HG comments"}
+Correct! But there is some information that you can provide here, including the averages and standard deviations of `libpct_m` and `womleg_2015`.
+:::
+
+Scatter plot description:
+
+There are some outliers that we cannot explain on the scatter plot.
+
+::: {.callout-tip title="HG comments"}
+Sounds good, but I would like more description of the scatter plot itself. Do you see a positive association? Are the points tightly clustered around each other or more spread out? 
+:::
 
 ## Question 2
 
 *Points: 5*
 
+::: {.callout-tip title="HG comments"}
+3/5 
+:::
+
 Regress `womleg_2015` (as the dependent variable) on `libpct_m` and report the results in a professionally formatted table. Write the model equation with the estimated coefficients and interpret them. What does the value of $R^2$ tell us about this model?
 
 Model equation: Y = womleg_2015 + (libpct_m)(x)
+
+::: {.callout-tip title="HG comments"}
+Almost! You get it right below, but above you are mixing up the dependent variable, `womleg_15` and the intercept coefficient, $\beta_0$, and mixing up the dependent variable, `libpct_m` and its coefficient, $\beta_1$. 
+
+The general regression equation is: 
+
+$$
+womleg\_2015 = \beta_0 + \beta_1 libpct\_m + \epsilon
+$$
+
+Which you correctly identify here:
+:::
 
 $$Y = 1.53 + 1.15(libpct_m)$$
 
@@ -75,11 +128,33 @@ summary(regress_m_1)
 glance(regress_m_1)
 ```
 
+::: {.callout-tip title="HG comments"}
+A professionally formatted table will include variable labels that are easy to interpret. I recommend redoing `Public_liberal`. Otherwise, good table. 
+:::
+
+::: {.callout-tip title="HG comments"}
+The question asks you to interpret the coefficients. 
+
+When zero percent of the mass public of a state identify as Liberal, you predict that the percentage of that state's legislature that identify as a woman will be `r tidy(regress_m_1) |> filter(term == "(Intercept)") |> pull(estimate) |> round(2)` percent on average. 
+
+For every one percentage point increase in the percent of the mass public of a state that identify as Liberal, you predict that the percentage of a state's legislature that identify as a woman will increase by `r tidy(regress_m_1) |> filter(term == "libpct_m") |> pull(estimate) |> round(2)` percentage points on average. You needed to include direction in your interpretation. 
+:::
+
 ANSWER: R squared is around .3707, which shows us a relatively weak relationship with the regression model and won't be able describe our dependent variable with confidence.
+
+::: {.callout-tip title="HG comments"}
+Almost! The $R^2$ value tells us what proportion of the variation in our dependent variable is explained by variation in our independent variables. 
+
+Here, an $R^2$ value of 0.3707 indicates that roughly 37.07% of the *variation* in the percentage of state legislators who identify as women is explained by *changes* in the percentage of the mass public that identify as Liberal.  
+:::
 
 ## Question 3
 
 *Points: 5*
+
+::: {.callout-tip title="HG comments"}
+3/5
+:::
 
 Based on this regression, find the predicted value, the observed value, and compute the residual for the state of Colorado and then the state of Georgia. Lastly, compute the total aggregate error from those two select observations combined (i.e., Colorado and Georgia).
 
@@ -137,11 +212,56 @@ GA: 21.71096
 
 CO: 26.36756
 
+::: {.callout-tip title="HG comments"}
+Correct!
+:::
+
+::: {.callout-tip title="HG comments"}
+We were looking for the observed values of the `womleg_2015` (dependent) variable, which you need to calculate the residual, but the question isn't clear so I haven't taken away any points. 
+:::
+
 Residual: 4.0634
+
+::: {.callout-tip title="HG comments"}
+The residual is the difference between the observed value and predicted value of your dependent variable. It gives you a sense of how well your model captures the relationship between these variables. 
+
+To calculate the residual:
+
+$$
+observed\ value - predicted\ value
+$$
+
+Here, for Colorado: 
+
+$$
+womleg\_2015_{CO} - \hat{womleg\_2015_{CO}} = 42 - 26.4 = 15.6
+$$
+
+For Georgia:
+
+$$
+womleg\_2015_{GA} - \hat{womleg\_2015_{GA}} = 22.9 - 21.7 = 1.19
+$$
+
+:::
+
+::: {.callout-tip title="HG comments"}
+The question also asks for the total aggregate error from those two select observations combined.
+
+To calculate this, you add the squared residuals for the two select observations.
+
+$$
+15.6^2 + 1.19^2 = 246
+$$
+:::
 
 ## Question 4
 
 *Points: 5*
+
+::: {.callout-tip title="HG comments"}
+4/5
+:::
 
 Using the `states` dataset, assess the relationship between the following two variables: `obama_win12` and `gun_rank3`. Construct a cross-tab and describe the nature of the relationship (if any) in detail.
 
@@ -162,9 +282,17 @@ datasummary_crosstab(obama_win12 ~ gun_rank3, data = states)
 
 ANSWER: The relationship between gun restriction and Obama winning states in 2012, when there were more restrictions on guns, Obama won(restriction 14). When Obama had less restriction (1) on guns, he lost the state.
 
+::: {.callout-tip title="HG comments"}
+It is often better to describe the relationship in proportional terms instead of counts. This makes comparing across and within groups easier. 
+:::
+
 ## Question 5
 
 *Points: 5*
+
+::: {.callout-tip title="HG comments"}
+5/5
+:::
 
 I hypothesize that religious identifiers in the mass public are less likely to support federal government support of scientific research. I use data from the General Social Survey to evaluate this hypothesis. In particular, I use a three-category indicator of religious attendance to measure religious identification (low attendance; moderate attendance; high attendance) and a three-category indicator of perceptions toward the federal government's support for scientific research (federal government provides "too little" support; "about right"; federal government provides "too much" support). Complete the cross-tab below so that you may properly evaluate my hypothesis.
 
@@ -200,6 +328,10 @@ But if we go the other way, if they have low religious attendance, based on the 
 
 *Points: 5*
 
+::: {.callout-tip title="HG comments"}
+5/5
+:::
+
 Say I wish to explore the relationship between the relative advantage of Democrats (`dem_advantage`) in a state and abortion policy (`abort_rank3`). The `dem_advantage` variable is a continuous indicator where higher values represent a greater Democratic advantage among the mass public; `abort_rank3` is an ordinal indicator for the extent of abortion restrictions in each state (fewer restrictions; middle restrictions; more restrictions). To explore this relationship, complete the following:
 
 ### Part A
@@ -232,6 +364,10 @@ Create a crosstab using R; include your results in a professionally formatted ta
 datasummary_crosstab(abort_rank3 ~ dem_adv, data = states)
 
 ```
+
+::: {.callout-tip title="HG comments"}
+Make sure your ordered categorical variables are provided in a meaningful order: low, mid, then high. 
+:::
 
 ### Part C
 
