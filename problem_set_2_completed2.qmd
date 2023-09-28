@@ -49,12 +49,6 @@ ggplot(data = states, aes(x = libpct_m, y = womleg_2015)) +
 
 ANSWER: Correlation equation:
 
-$$Y= \beta_0+\beta_1(x)$$
-
-Y = womleg_2015 + 0.6088(libpct_m)
-
-Scatter plot description: There are some outliers that we cannot explain on the scatter plot
-
 ## Question 2
 
 *Points: 5*

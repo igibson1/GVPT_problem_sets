@@ -1,0 +1,227 @@
+---
+title: "Problem Set 1"
+subtitle: "Due date: 18 September"
+format: 
+  html:
+    self-contained: true
+editor: visual
+execute: 
+  echo: true
+---
+
+```{r}
+
+library(tidyverse)
+library(poliscidata)
+```
+
+Please upload your completed assignment to the ELMs course site (under the assignments menu). Remember to include an annotated script file for all work with R and show your math for all other problems (if applicable, or necessary). Please also upload your completed assignment to the Github repository that you have shared with us. *We should be able to run your script with no errors.*
+
+**Total points: 25**
+
+::: {.callout-tip title="HG comments"}
+Great work and code. Just please be careful to answer all of the questions in full. 21/25.
+:::
+
+## Question 1
+
+*Points: 5*
+
+::: {.callout-tip title="HG comments"}
+Good answer and code. Need more detail about the distributions and I am missing your frequency distribution in the rendered document. 3/5.
+:::
+
+Using the `gss` dataset (which has survey data with the individual respondent as the unit of analysis), create a frequency distribution and bar chart for each of the following variables: `degree` and `partyid_3`. Describe the distribution of each variable in detail.
+
+::: callout-note
+The `gss` dataset can be found in `poliscidata::gss`. Take a look at `?gss` to see what these variables measure.
+:::
+
+```{r}
+degree_data <- select(poliscidata::gss, degree)
+
+degree <- table(degree_data)
+
+barplot(degree, main = "Frequency of Degree", xlab = "Degree", ylab = "Frequency")
+
+summary(degree)
+```
+
+::: {.callout-tip title="HG comments"}
+Please make sure to print out the frequency distribution so that we can see it. I cannot see it in your rendered document (you need to explicitly call it after you have assigned it to an object to print it). 
+
+For example: 
+
+```{r}
+degree_data <- select(poliscidata::gss, degree)
+
+degree <- table(degree_data)
+degree
+```
+:::
+
+ANSWER: The highest number in the distribution is from people with HS diplomas
+
+::: {.callout-tip title="HG comments"}
+Because the question asked for you to describe the distribution of each variable in detail, we need more detail about the distribution than just the most frequently occurring category. 
+:::
+
+```{r}
+partyid_data <- select(poliscidata::gss, partyid_3)
+
+partyid <- table(partyid_data)
+
+barplot(partyid, main = "Frequency of partyid", xlab = "partyid", ylab = "Frequency")
+
+summary(partyid)
+```
+
+ANSWER: The distribution describes the party ID of voters, in this frequency table, the independents have the highest number.
+
+::: {.callout-tip title="HG comments"}
+Please see comments above. 
+:::
+
+## Question 2
+
+Examine the following vector of (fake) student IQ test scores:
+
+```{r}
+iq <- c(
+  145, 139, 126, 122, 125, 130, 96, 110, 118, 118, 101, 142, 134, 124, 112, 109, 
+  134, 113, 81, 113, 123, 94, 100, 136, 109, 131, 117, 110, 127, 124, 106, 124, 
+  115, 133, 116, 102, 127, 117, 109, 137, 117, 90, 103, 114, 139, 101, 122, 105, 
+  97, 89, 102, 108, 110, 128, 114, 112, 114, 102, 82, 101
+)
+```
+
+### Part A
+
+*Points: 5*
+
+::: {.callout-tip title="HG comments"}
+Correct and good code. 5/5.
+:::
+
+Find the five-number summary, mean, and standard deviation for these data. Also, are there any suspected outliers in the distribution? If so, what are they and how do you know?
+
+```{r}
+summary(iq)
+iq_sd <- sd(iq)
+iq_sd
+
+mean(iq)
+sd(iq)
+
+iq.df <- data.frame(iq)
+
+ggplot(iq.df, aes(x = "", y = iq)) +
+  geom_boxplot(fill = "black") +
+  labs(title = "iq boxplot", y = "Student Scores") +
+  theme_minimal()
+
+boxplot.stats(iq)$out
+
+outlier <- boxplot.stats(iq)$out
+```
+
+::: {.callout-tip title="HG comments"}
+I recommend picking a light fill colour. The solid black makes it difficult to see the median line. 
+:::
+
+ANSWER: SD: 14.80 MEAN: 114.98
+
+ANSWER: According to the presented the box plot there seems to be no *suspected* outliers.
+
+### Part B
+
+*Points: 5*
+
+::: {.callout-tip title="HG comments"}
+Missing your comparison of the SDs. 3/5.
+:::
+
+In large populations, IQ scores are standardized to have a mean of 100 and a standard deviation of 15. In what way does the distribution among these students differ from the overall population?
+
+```{r}
+mean <- mean(iq)
+
+sd <- sd(iq)
+
+standard <- (iq - mean)/sd * 15 + 100 
+
+barplot(iq, main = "IQ scores", xlab = "student scores", ylab = "mean") 
+
+
+```
+
+::: {.callout-tip title="HG comments"}
+A bar plot is not the best graph type to use to detect distributions. This is because the order on the x-axis is arbitrary. A histogram or density plot are better graph types for exploring this question. These graph types provide a more meaningful order to our data, allowing us to get a better sense of their central point and spread. 
+
+```{r}
+ggplot(tibble(iq = iq), aes(x = iq)) + 
+  geom_density()
+```
+:::
+
+ANSWER: The distribution in this barplot is a bit hard to see but I believe that the distribution with these students differ from the overall population because their IQ is a bit higher. Testing/scores can be dependent on environmental conditions that are not taken into account (noise, test anxiety, sleep etc).
+
+::: {.callout-tip title="HG comments"}
+Correct: the mean IQ score for this group is higher than the mean found (by design) within large populations. 
+
+We are missing your assessment of the difference between this group's standard deviation and that of a large population. The standard deviation of this group is `r round(sd(iq), 2)`. The standard deviation of large populations is 15. Therefore, these two groups show roughly the same spread. This group is slightly more clustered around the mean (has a smaller variance) than that of a large population. 
+:::
+
+## Question 3
+
+*Points: 5*
+
+::: {.callout-tip title="HG comments"}
+Correct. 5/5.
+:::
+
+A polling firm is interested in determining how different characteristics of an individual affect vote choice. They record the following characteristics for each survey respondent - race, age, household income, and party affiliation. What "type" of variable does each characteristic most likely represent?
+
+ANSWER: Race is the categorical variable
+
+Age is the continuous variable
+
+Household income is the continuous
+
+Party affiliation is the Categorical
+
+## Question 4
+
+*Points: 5*
+
+::: {.callout-tip title="HG comments"}
+Correct. 5/5.
+:::
+
+Using the `states` dataset (the unit of analysis is each U.S. state), generate a box plot and density curve for each of the `vep12_turnout` and `cig_tax12` variables. Describe the distribution of each variable in detail.
+
+::: callout-note
+The `states` data set can be found in `poliscidata::states`. Take a look at `?states` to see what these variables measure.
+:::
+
+::: {.callout-tip title="HG comments"}
+Make sure to check your rendered document before submitting. You have printed out the whole data set. No worries! It just makes the document hard to read. I would remove this line of code: `poliscidata::states`.  
+:::
+
+```{r}
+# poliscidata::states
+boxplot(states$vep12_turnout)
+boxplot(states$cig_tax12)
+plot(density(states$cig_tax12))
+plot(density(states$vep12_turnout))
+
+?states
+```
+
+Percent turnout of voting eligible population (2012)
+
+-   The density curve shows a normal distribution
+
+Cigarette tax per pack (2012)
+
+-   The density curve shows a skewed right distribution
