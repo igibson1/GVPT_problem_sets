@@ -1,0 +1,438 @@
+---
+title: "Mid-Term Exam #1"
+subtitle: "Due date: 6 October (11:59 pm)"
+format: pdf
+editor: visual
+execute: 
+  echo: true
+---
+
+Please read all of the questions and tables carefully and follow all instructions. Each question has an allotted point value. Be as thorough and specific as possible; extra calculations and incorrect information, even in the presence of correct information, will result in point deductions. Be sure to show all formulas and all necessary work to answer the questions. You may upload your completed exam to the Elms course site (attach to Exam #1).
+
+::: callout-note
+While this is an open-note exam, you are not to receive assistance from anyone else. As usual, the Honor Code applies.
+:::
+
+## Conceptual Questions
+
+**Total points: 15**
+
+Please include all work (and computations) necessary to answer the questions.
+
+```{r}
+library(poliscidata)
+library(tidyverse)
+library(states)
+library(modelsummary)
+library(broom)
+```
+
+### Question 1
+
+*1 point*
+
+The following is a list of observed values, ordered from lowest to highest: 62, 63, 63, 64, 66, 67, 68, 68, 69, 70, 71, 72, 72, 74, 75, 76. What is an accurate five-number summary for these data?
+
+```{r}
+# Create a numeric vector to use Summary function
+data_vector <- c(62, 63, 63, 64, 66, 67, 68, 68, 69, 70, 71, 72, 72, 74, 75, 76)
+
+#five-number summary function applied 
+summary(data_vector)
+
+#create a boxplot to visualize
+
+# Define the five-number summary
+minimum <- 62.00
+q1 <- 65.50
+median_val <- 68.50
+q3 <- 72.00
+maximum <- 76.00
+
+q1-1.5*(6.5)
+
+# Create a data frame with these values
+data_summary <- data.frame(minimum, q1, median_val, q3, maximum)
+
+# Create a box plot from the five-number summary
+summary(data_vector)
+data_vector_sd <- sd(data_vector)
+data_vector_sd
+
+mean(data_vector)
+sd(data_vector)
+
+data_vector.df <- data.frame(data_vector)
+
+ggplot(data_vector.df, aes(x = "", y = data_vector)) +
+  geom_boxplot(fill = "grey") +
+  labs(title = "boxplot", y = "five number summary") +
+  theme_minimal()
+
+boxplot.stats(data_vector)$out
+
+outlier <- boxplot.stats(data_vector)$out
+
+
+```
+
+ANSWER: Five Number Summary: Min 62.00, 1st Q 65.50, Median 68.75, 3rd Q 72.00 and Max 76.00
+
+### Question 2
+
+*1 point*
+
+Suppose that the median, Q1, and Q3 from question #1 is an accurate representation of a second (hypothetical) distribution. Based on what this information tells you about this second distribution, which of the following numbers would be a suspected outlier?
+
+```{r}
+q1-median_val
+q3-median_val
+```
+
+A.  76
+B.  62
+C.  83
+D.  Both (A) and (C)
+E.  All of the above
+F.  None of the above, or cannot be determined from the information given.
+
+ANSWER: C
+
+Center: Median falls not directly in the middle of the overall range of values, it is closer to our lower quartile value Q1, skewing our data slightly left.
+
+Spread: The width of the boxplot is Q1-Q3 (65-72), suggesting a small amount of variability, 50% of our data will fall in this area.
+
+Skewness: The data is negatively skewed to the left, the median is closer to Q1 suggesting a negative skew
+
+Outliers: 83 our max value could be a suspected outlier
+
+### Question 3
+
+*1 point*
+
+There is a group of three children with the following ages: 3, 4, and 5. If a 6-year-old child joins the group, what will happen to the mean and standard deviation of the group's age?
+
+The data will be skewed to the left, creating a slight negative skew and change the mean to be grow further from min value
+
+1st mean: 4
+
+2nd mean: 4.5
+
+### Question 4
+
+*1 point*
+
+If I estimate an OLS regression and obtain a $R^2$ of 0.40 where the Total Sum of Squares of 4,150, what does the Residual Sum of Squares equal?
+
+```{r}
+0.40*4150
+#RSS = TSS - ESS
+4150 - 1660
+
+```
+
+ANSWER: RSS = 2,490
+
+### Question 5
+
+*1 point*
+
+The distribution of some variable has a median that is smaller than its mean. Which of the following statements about the distribution's shape is most consistent with this information?
+
+A.  The shape of the distribution would be symmetric
+B.  The shape of the distribution would be skewed left
+C.  The shape of the distribution would be skewed right
+D.  None of the above -- cannot be determined from the information given.
+
+ANSWER: C - Right skewed distribution
+
+### Question 6
+
+*1 point*
+
+Suppose I want to test the hypothesis that the U.S. public's approval of the president is higher when people have more positive perceptions of the U.S. economy. To test this hypothesis, I conduct a survey of individual-level attitudes. Which of the following research design strategies should I expect to exhibit both the greatest sampling variability (in the context of repeated sampling) and the lowest degree of expected sampling bias?
+
+A.  A random sample of 1,200 people from a list of all U.S. residential addresses
+B.  A random sample of 600 people from a list of all registered students at the University of Maryland
+C.  A random sample of 1,200 people from a list of all registered students at the University of Maryland
+D.  A random sample of 600 people from a list of all U.S. residential addresses.
+
+ANSWER: A
+
+### Question 7
+
+*1 point*
+
+The median age of ten people in a room is 50 years. One 40-year-old person leaves the room. What can we expect will happen to the median age for the remaining nine people? Do we know the median age of those nine people; if so, what is it?
+
+The median is the *middle value*, of the numbers listed lowest to highest, if one person out of 10 leaves it does affect the median value, 9 people are left and the median age will still be 50
+
+### Question 8
+
+*1 point*
+
+The mean age of ten people in a room is 50 years. One 70-years-old person leaves the room. What can we expect will happen to the mean age for the remaining nine people? Do we know the mean age of those nine people; if so, what is it?
+
+```{r}
+10*50
+500-70
+430/9
+#new mean is around 47.78
+```
+
+ANSWER: The new mean age will decrease because a person who is older than the mean, is leaving the room. The new mean is around 47.78 years old
+
+### Question 9
+
+*1 point*
+
+Which of the following sets of numbers has the largest standard deviation?
+
+A.  2, 4, 6, 8 = 2.58
+B.  7, 8, 9, 10 = 1.29
+C.  5, 5, 5, 5 = 0
+D.  1, 2, 3, 5 = 1.71
+
+ANSWER: A, has the largest deviation
+
+```{r}
+data <- c(2, 4, 6, 8)
+mean_val <- mean(data)
+var_val <- var(data)
+sd_val <- sqrt(var_val)
+
+cat("Standard Deviation:", sd_val, "\n")
+```
+
+### Question 10
+
+*6 points*
+
+I hypothesize that people with greater social trust are more likely to turnout to vote in American national elections. I use data from the 2012 General Social Survey to examine how respondents' self-reported level of social trust might be correlated with their decisions to vote. In particular, I use the `social_trust` variable (i.e., a 4-point ordinal indicator of social trust -- larger values reflect greater trust) and the `vote08` variable (i.e., a dichotomous indicator where a `1` indicates that the respondent voted) to test my hypothesis.
+
+Complete the cross-tab below so that you may properly evaluate my hypothesis. Briefly interpret the results of your completed cross-tab. Do the data suggest that social trust is related to voting in 2008? Be sure to explain the nature of the relationship (or lack thereof, if relevant).
+
+FINISHED CROSS-TAB:
+
+![](mid_term_examq10done.jpg){width="380"}
+
+The hypothesis is that people with *greater social trust*, will turn out to vote in 2008, the cross tab shows that the hypothesis is generally true, but I would say it needs further exploration because:
+
+We see in the cross-tab that a greater amount of people that *do not have social trust and did not vote, (*level 0 trust and did not vote) was 43.35%. Only 9.49% of those who did not vote have great social trust. This matches the hypothesis, expecting those with lower or 0 social trust to not vote.
+
+BUT when we look at those who did vote and their level of social trust, it gets complicated. When we look at those who have greater social trust and did vote (level 3 social trust and did vote), the percentage is 27.18%, which is greater than levels 1-2 trust. That matches the hypothesis. But when we examine those who have 0 social trust and did vote, the percentage is 29.11, which is *slightly* larger than those who have greater social trust and did vote. This does not match the hypothesis, but the percentage is so slight, that it could be due to other confounding factors, maybe a few people in that group who rated their social trust as 0 and did vote have other reasons for not having social trust, those few individuals could be outliers skewing the result.
+
+Overall, the hypothesis is true with the given data, there is only one category in which the results don't match the hypothesis but could be due to other reasons.
+
+Table entries represent raw counts of observations within each cell.
+
+![](img/mid_term_exam.png)
+
+## Applied Questions
+
+Please include your R code. All data sets referenced below are available through the `poliscidata` R-package.
+
+**Total points: 20**
+
+### Question 1
+
+*10 points total*
+
+Use the `states` dataset (the U.S. state is the unit of analysis) and estimate a bivariate regression where the size of a state's urban population (`urban`) explains variation in abortion attitudes (`permit`) and report the results in a professionally formatted table. The variable `permit` measures the percentage (on a 0-to-100 scale) of a state's population that says abortion should always be allowed. The variable `urban` measures the percentage (on a 0-to-100 scale) of a state's population in an urban area. Answer the following questions.
+
+```{r}
+?states
+
+model <- lm(permit ~ urban, data = states)
+
+summary(model)
+
+regress_m_1 <- lm(permit ~ urban, states)
+regress_m_1
+
+#Professionally formatted table 
+modelsummary(
+  regress_m_1, 
+  statistic = NULL,
+  coef_rename = c("Abortion Attitudes" = "States Urban population"),
+  gof_map = "nobs"
+)
+
+summary(regress_m_1)
+
+glance(regress_m_1)
+
+#Scatter plot to visualize association 
+ggplot(data = states, aes(x = urban, y = permit)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE) +
+  labs(
+    title = "Scatterplot",
+    x = " Urban Population",
+    y = "Abortion Attitudes"
+  )
+ cor(states$permit, states$urban)
+
+```
+
+A.  Interpret the effect of the independent variable on the dependent variable. *2 points*
+
+    -   There is a positive correlation, shown with the positive coefficient. The effect of the states percentage of the urban population on the states population percentage of those who say abortion should always be allowed is goes up .37326 This means when theres an increase in the states percentage of the urban population, there will be an increase in the states population that says abortion should always be allowed
+
+B.  Interpret the estimate of the intercept. Is it substantively meaningful to interpret this coefficient on its own? Explain why, or why not. *2 points*
+
+    -   I would say this is NOT a meaningful way to interpret this coefficient, because it isn't within range of the urban population, and this starts at around 20%. When the IV = 0, the percentage is at 9.64%
+
+C.  Compute the residual sum of squares for the following two observations combined: (1) California; and (2) Texas. *2 points*
+
+    -   RSS TX=42.07
+
+    -   RSS CA=49.52
+
+    ```{r}
+
+
+    regress_m_1
+    tidy(regress_m_1)
+
+    regress_m_1_ct <- tidy(regress_m_1)
+
+    augment(regress_m_1)
+
+    beta_0 <- regress_m_1_ct |>
+      filter(term == "(Intercept)") |>
+      pull(estimate)
+
+    beta_0
+
+    beta_1 <- regress_m_1_ct |>
+      filter(term == "urban") |>
+      pull(estimate)
+    beta_1
+
+    ?state
+    states |>
+      filter(stateid%in%c("CA    ", "TX    ")) |>
+      select(stateid, urban)
+
+    #predicted value of TX = 40.43
+
+    beta_0 + beta_1 *82.5
+
+    #predicted value of CA=44.88
+
+    beta_0 + beta_1 *94.4
+
+    #observed values
+    #CA= 94.4 
+    #TX=82.5
+
+    #residual CA= 49.52
+    94.4-44.88
+
+    #residual TX= 42.07
+    82.5-40.43
+
+    ```
+
+D.  How well does the model fit the data (i.e., how well can we explain abortion attitudes with this model?) *2 points*
+
+    -   The model does not fit the data well, the R squared is .27 (27%), it doesn't explain the variance in the DV and doesn't give a great prediction
+
+E.  Is the relationship between the independent and dependent variable causal? Why or why not? *2 points*
+
+-   There is not a causal relationship, there is a correlation, a positive association between the variables but there is not an identified causal relationship
+
+-   When the percentage of the urban population is goes up, the percentage of the states population that says abortion should always also goes up. When the percentage of the states urban population is 0, the maximum predicted value for states population that says abortion should always be allowed, at best is 9.64, creating a positive associated relationship
+
+### Question 2
+
+*5 points*
+
+Use the `gss` data set (the unit of analysis is the individual survey respondent) and evaluate the hypothesis that Republicans had less confidence in the executive branch of the federal government than Democrats in 2016 (2012). Use the following variables: `partyid` is a 7-category ordinal indicator (0 = Strong Democrat; 1 = Weak Democrat; 2 = Independent Democrat; 3 = Independent; 4 = Independent Republican; 5 = Weak Republican; 6 = Strong Republican); and `confed` is a 3-category ordinal indicator (1 = "a great deal" of confidence; 2 = "only some;" 3 = "hardly any"). Do the data support the hypothesis and how do you know?
+
+```{r}
+
+datasummary_crosstab(partyid ~ confed, data = gss)
+```
+
+-   The hypothesis is supported according to the cross-tab
+
+-   The percentage of strong Democrats with a great deal of confidence in the federal government was 19.9% while the precentage of strong republicans with a great deal of confidence was only 3.1%. This supports the hypothesis, but we'll look further
+
+-   The percentage of strong democrats with hardly any confidence in the federal government was 14.9%, less than the strong republicans with hardly any confidence with 41.1%
+
+-   These results from the cross tab show us that the hypothesis that Republicans had less confidence in the executive branch of the federal government than Democrats in 2016 (2012), is supported by the data.
+
+### Question 3
+
+*5 points*
+
+Use the `world` dataset and evaluate the distributions for each the following variables: `literacy` (a country's literacy rate) and `free_overall` (a country's degree of economic freedom). Be sure to visually display each distribution and thoroughly describe their key attributes. Next, evaluate the bivariate relationship between the two variables -- i.e., is economic freedom associated with literacy? If so, what is the nature of the relationship and how do you know? In doing so, be sure to use proper descriptive tools (and thus do not rely simply on a regression output).
+
+```{r}
+poliscidata::world
+
+#Degree of economic Freedom free_overall
+free_overall_data <- select(poliscidata::world, free_overall)
+
+free_overall <- table(free_overall_data)
+free_overall
+
+barplot(free_overall, main = "Degree of Economic Freedom", xlab = "Economic Freedom", ylab = "Frequency")
+
+#Literacy rate
+literacy_data <- select(poliscidata::world, literacy)
+
+literacy <- table(literacy_data)
+literacy
+
+barplot(literacy, main = "Country Literacy Rate", xlab = "Literacy Rate", ylab = "Frequency")
+
+#Density Plot Literacy 
+
+ggplot(world, aes(x = literacy)) +
+  geom_density(fill = "pink", color = "red") +
+  labs(title = "Literacy Rate",
+       x = "Literacy Rate",
+       y = "density") + 
+  xlim(20, 140)
+
+ggplot(world, aes(x = free_overall)) +
+  geom_density(fill = "blue", color = "black") +
+  labs(title = "Economic Freedom",
+       x = "Economic Freedom",
+       y = "density") +
+   xlim(20, 120)
+```
+
+-   The literacy rates appear to be right skewed, meaning that most countries have a high literacy rate and there is a peak of countries who have even higher literacy rates. While it is minor, there is a tail from the density plot that shows us there might be other countries with a lower literacy rate than the rest.
+
+-   Economic Freedom degree has an overall normal distribution. The freedom scores appear to be spread across the values evenly. The density plot does display a small tail of countries who have lower scores of economic freedom as well
+
+```{r}
+
+model <- lm(literacy ~ free_overall, data = world)
+
+summary(model)
+
+modelsummary(
+  model, 
+  statistic = NULL,
+  coef_rename = c("free_overall" = "Economic Freedom"),
+  gof_map = "nobs"
+)
+
+#scatter plot
+ggplot(world, aes(x = literacy, y = free_overall)) +
+  geom_point(color = "black") +
+  labs(title = "Literacy Rates vs. Economic Freedom Scores",
+       x = "Countries Literacy Rate",
+       y = "Countries Economic Freedom")
+```
+
+-   In the scatter-plot, we see a cluster of points meaning, when a country has a higher score of economic freedom, the countries literacy rate also goes up, describing a relatively weak positive correlation between degrees of economic freedom and literacy rates within a country
+
+-   I describe the correlation as a weak positive correlation because we see a light upward trend when economic freedom goes up, literacy rates go up and cluster tighter as it goes up.
+
+-   The intercept is a positive coefficient is 33.078 indicates a positive relationship between Literacy rates and degree of economic freedom
