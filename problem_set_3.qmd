@@ -65,9 +65,8 @@ DV: An individuals trust in government
 
     -   Wording effects, some questions could push people to answer in a certain way
 
-    ```{=html}
     <!-- -->
-    ```
+
     -   Potential bias, if the sample not representative of population
 
 4.  Post-treatment questions
@@ -82,9 +81,8 @@ Below are four hypothetical research designs to determine the effects of democra
 
 A.  A sample of educational funding levels for every country in Europe for each of the last 100 years.
 
-```{=html}
 <!-- -->
-```
+
 1.  The sampling variability
 
 This sample does not have a lot of variability, it is low. Looking at all the countries educational funding in the world vs. JUST the countries in Europe, will have sampling bias.
@@ -119,16 +117,15 @@ Response bias can be found in these surveys, if a educational admin suspects the
 
 -   Convenience sampling: Just ask whoever is around (e.g college students). Potential bias: Opinions limited to individuals present. Likely to have sampling bias, sample not representative of population - unclear on how they gathered their educational admin responses 
 
-```{=html}
 <!-- -->
-```
+
 -   Voluntary Response Sampling: Individuals choose to be involved. Bias: sample designs systematically favors a particular outcomes. Some individuals more likely to be measured than others - unclear on how they gathered their educational admin responses  
 
 D. A sample of 75 randomly selected countries' educational funding levels for each of the past 25 years.
 
 1.  Sample Variability
 
-The sample variability is high due to its random selection of countries from the GLOBAL population of countries from the last 25 years.
+The sample variability is very high due to its random selection of 75 countries from the GLOBAL population of countries from the last 25 years.
 
 2.  Potential Bias
 
