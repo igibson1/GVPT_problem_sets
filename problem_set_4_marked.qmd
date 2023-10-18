@@ -1,0 +1,178 @@
+---
+title: "Problem Set 4"
+subtitle: "Due date: 16 October"
+format: 
+  html:
+    self-contained: true
+toc: true
+editor: visual
+execute: 
+  echo: true
+---
+
+Please upload your completed assignment to the ELMs course site (under the assignments menu). Remember to include an annotated script file for all work with R and show your math for all other problems (if applicable, or necessary). Please also upload your completed assignment to the Github repository that you have shared with us. *We should be able to run your script with no errors.*
+
+**Total points: 30**
+
+## Question 1
+
+*Points: 5*
+
+::: {.callout-tip title="HG comments"}
+5/5
+:::
+
+Suppose I am playing poker with a regular deck of 52 cards. I have three cards in my hand, one of which is a king. What is the probability that the next two cards I draw will both be kings?
+
+-   P(K1)= 3/(52-3) = 3/49
+
+-   P(K2)= 2/(49-1)= 2/48
+
+-   P(K1)P(K2) = (3/39)\*(2/48)
+
+```{r}
+(3/49)*(2/48)
+```
+
+ANSWER: The probability that the next two cards will both be kinds is about 0.00255 or 0.255%
+
+## Question 2
+
+*Points: 5*
+
+::: {.callout-tip title="HG comments"}
+5/5
+:::
+
+A survey of 1,500 randomly selected individuals reveals that 46% of them have a college degree and that 31% of them have a gun in their house. If you were to assume that college graduation and gun ownership are independent of one another, what is the probability that an individual is both a college graduate and does not have a gun in his or her house?
+
+P(College) = .46
+
+P(Gun)= .31
+
+P(NGun)= 1 gun not in the house
+
+-   P(NGun)=1, P(NGun) - P(G)
+
+```{r}
+#Complement of P(G) - probability of not having a gun in the house = .69
+1-.31
+```
+
+College graduate and not having a gun
+
+-   P(C and NGun) = P(C) \* P(NGun) = .3174
+
+```{r}
+.46*.69
+```
+
+ANSWER: Probability that the person is a college graduate and no gun in their house = .3174 or 31.74%
+
+## Question 3
+
+*Points: 5*
+
+::: {.callout-tip title="HG comments"}
+3/5
+:::
+
+I roll a fair six-sided dice and I get a number greater than three. What is the probability that the next two dice rolls will also generate numbers greater than three?
+
+-   1st Rolling a number greater than 3 = 3/6 (4,5,6)
+
+-   2nd roll greater than 3 = 4/6 = 2/3
+
+::: {.callout-tip title="HG comments"}
+These events are independent. I have the same probability of rolling a number greater than 3 on the second roll as the first. 
+:::
+
+-   The probability of the next two dice rolls will generate number greater than 3, P(2nd)\*P(2nd) = .4444
+
+```{r}
+(2/3)*(2/3)
+```
+
+ANSWER: The probability that the next two dice rolls will generate numbers \> 3 = 4/9, .44 or 44.44%
+
+::: {.callout-tip title="HG comments"}
+$$
+Pr(>3) = \frac{1}{2}
+$$ 
+
+
+$$
+Pr(>3\ \& >3) = Pr(>3) * Pr(>3) = 0.5 * 0.5 = 0.25
+$$
+:::
+
+## Question 4
+
+*Points: 10*
+
+::: {.callout-tip title="HG comments"}
+10/10
+:::
+
+Assume that in the United States, 15% of people are smokers and, of smokers, 60% smoke at least one pack a day. Among those who smoke at least a pack a day, 60% will develop lung cancer at some point in their lives while, in the rest of the population (which includes smokers who smoke less than a pack a day and non-smokers), only 10% will. What is the probability that a person who develops lung cancer was a smoker who smoked at least a pack a day?
+
+-   P(C) = Person gets lung cancer = .145 or 14.5%
+
+-   P(S) = Person that is a smoker, smokes 1 pack a day, P(S)=(.15)\*(.6)= .09 or 9%
+
+-   P(C\|NS)= prob get cancer and not a smoker and not smoke 1 pack a day
+
+-   P(S\|C) = probability that a person is a smoker, 1pack a day and cancer = .60 or 60%
+
+-   overall prob that a person gets lung cancer P(C) = P(C\|S)\**(P(S) + P(C\|NS)\**(PNS)
+
+```{r}
+.15*.6
+```
+
+-   P(C)= (.6\*.15\*.6) + (0.10\*(1-0.15\*.060) = .145 or 14.5%
+
+```{r}
+(.6*.15*.6)
+0.10*(1-0.15*.60)
+0.054+0.091
+```
+
+P(S\|C) = P(C\|S)\*P(S)/P(C\|S)\**(P(S) + P(C\|NS)\**(PNS)
+
+= .6\*.09/(.6\*.09+(.10\*.91)
+
+= .054/.145 = .3724
+
+```{r}
+.054/.145
+```
+
+ANSWER: The probability that one who develops lung cancer was a smoker who smoked 1 pack a day is .3724 or 37.24%
+
+## Question 5
+
+*Points: 5*
+
+::: {.callout-tip title="HG comments"}
+5/5
+:::
+
+Assume that in the world, 60% of countries are democracies and 80% of countries have ratified the Rome Statute for the International Criminal Court. Assume further that 90% of democracies have ratified the Rome Accords. What is the probability that a country is either a democracy or has ratified the Rome Accords?
+
+P(D) = country is democracy 60% .60
+
+P(R) = country is ratified the Rome Accords 80% or .80
+
+Find P(D or B)
+
+P(D or R) = P(D) + P(R) - P(D and R)
+
+P(D and R) = .6\*.9= 0.54
+
+```{r}
+.6+.8
+1.4-.54
+```
+
+ANSWER: The probability that a country is either a democracy or ratified the Rome accords is .86 or 86%
