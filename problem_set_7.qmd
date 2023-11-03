@@ -28,11 +28,45 @@ Make a cross-tab, by hand, of the relationship between these two variables based
 
 ![](img/PS7.png)
 
++-----------------+----------------+----------------+----------------+----------------+
+| Age             | Not at all     | Somewhat       | Very much      | Row total      |
++=================+================+================+================+================+
+| 21-35           | 5 (45.45%)     | 6 (35.29%)     | 1 (8.33%)      | 12             |
+|                 |                |                |                |                |
+|                 | (ex: 3.3)      | (ex: 5.1)      | (ex: 3.6)      |                |
+|                 |                |                |                |                |
+|                 | chisq (0.8758) | chisq (0.1588) | chisq (1.8778) |                |
++-----------------+----------------+----------------+----------------+----------------+
+| 36-50           | 1 (9.09%)      | 5 (29.41%)     | 3 (25%)        | 9              |
+|                 |                |                |                |                |
+|                 | (ex: 2.475)    | (ex: 3.825)    | (ex: 2.7)      |                |
+|                 |                |                |                |                |
+|                 | chisq (0.8790) | chisq (0.3609) | chisq (0.033)  |                |
++-----------------+----------------+----------------+----------------+----------------+
+| 51-65           | 2 (18.18%)     | 2 (11.76)      | 4 (33.33%)     | 8              |
+|                 |                |                |                |                |
+|                 | (ex: 2.2)      | (ex: 3.4)      | (ex: 2.4)      |                |
+|                 |                |                |                |                |
+|                 | chisq (0.1818) | chisq (0.5765) | chisq (1.0667) |                |
++-----------------+----------------+----------------+----------------+----------------+
+| 66+             | 3 (27.27%)     | 4 (23.53%)     | 4 (33.33%)     | 11             |
+|                 |                |                |                |                |
+|                 | (ex: 3.025)    | (ex: 4.675)    | (ex: 3.3)      |                |
+|                 |                |                |                |                |
+|                 | chisq (0.0002) | chisq (0.0975) | chisq (0.1485) |                |
++-----------------+----------------+----------------+----------------+----------------+
+| Column total    | 11 (100%)      | 17 (100%)      | 12 (100%)      | 40             |
+|                 |                |                |                |                |
+|                 | chisq (1.9368) | chisq (1.1937) | chisq (3.1263) | chisq (6.2568) |
++-----------------+----------------+----------------+----------------+----------------+
+
 ### Part B
 
 *Points: 2*
 
 Do the data support my hypothesis? Be sure to explain the nature of the relationship (or lack thereof, if relevant).
+
+-   The data does support the hypothesis. In the age group 51-65, very much column, the percentages are larger than the younger ages, showing us that the older you are the more you like to watch golf.
 
 ### Part C
 
@@ -40,11 +74,17 @@ Do the data support my hypothesis? Be sure to explain the nature of the relation
 
 Compute (by hand) the chi-square statistic to test the null hypothesis of no relationship between these two variables. Be sure to show your work.
 
+-   The formula I used to fill out cross-tab with the expected and chisq totals was:
+
+![![](images/Untitled.png){width="292"}](images/Untitled 2.png){width="362"}
+
 ### Part D
 
 *Points: 2*
 
 Using the chi-square statistic that you computed in question 1(c), can you reject the null hypothesis of no relationship between these two variables with 95% confidence? Why, or why not?
+
+-   With a chi statistic of 6.2568 with 6 degrees of freedom. The rejection value 12.59 with 95% confidence. Since our chi squared statistic is less than the critical rejection value, I fail to reject the null hypothesis.
 
 ## Question 2
 
@@ -53,3 +93,28 @@ Using the chi-square statistic that you computed in question 1(c), can you rejec
 I hypothesize that people who identify as more liberal are less likely to see gun control as an important issue than people who identify as more conservative. Using the `nes` dataset from the `poliscidata` package, create a cross-tab examining the effect of someone's self-identification as liberal or conservative, measured using the variable `libcon3` variable, and their indication of how important gun access is to them as an issue, measured using the `gun_importance3` variable.
 
 Do the data support my hypothesis? Be sure to explain the nature of the relationship (or lack thereof, if relevant). Report a chi-square statistic (it is fine to have R generate the statistic and p-value). What does the chi-square statistic tell you about whether you can reject the null hypothesis of no relationship between these two variables with 95% confidence? Why, or why not?
+
+```{r}
+library(tidyverse)
+library(poliscidata)
+data(nes)
+library(modelsummary)
+```
+
+```{r}
+datasummary_crosstab(libcon3 ~ gun_importance3, data = nes)
+```
+
+```{r}
+chisq.test(nes$libcon3, nes$gun_importance3)
+```
+
+-   Answer: The chi-sq statistic is 40.105 and the p-value is 0.00000000118 at 95% confidence
+
+-   Null hypothesis: There is no association between identifying as liberal or conservative and gun access as an issue
+
+    -   With the chi-square statistic, it doesn't provide a direction, but it tells us that there is a significant relationship between the variables.
+
+    -   We reject the null hypothesis at the 95% confidence, as our p-value is significantly low.
+
+-   The data set does NOT support the suggested hypothesis. As seen in the cross-tab, 37% of liberals believe that gun control is more important vs. only 33% of conservatives agreeing that gun control is more important. This goes against the hypothesis that those who identify as liberals are less likely to think gun control is important than those who identify as conservative.
