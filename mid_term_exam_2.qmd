@@ -683,25 +683,25 @@ ANSWER: The point estimate for the proportion of respondents that voted, among c
 
 Evaluate the null hypothesis that there is no difference in the proportion of voters (i.e., turnout rate) among citizens expressing that religion is not important vs. those reporting that religion matters a great deal. Do the data support my hypothesis? Why or why not? Be sure to show all work necessary to answer the question by hand (i.e., you may only use R to the extent that is absolutely necessary to complete the question; otherwise, you must show how you would answer the question by hand).
 
-+----------+----------------------+----------------------+----------------------+----------------------+--------------+
-| Voted    | 0                    | 1                    | 2                    | 3                    | All          |
-+==========+======================+======================+======================+======================+==============+
-| 0        | Observed: 297, 38.2% | Observed: 106, 13.6% | Observed: 141, 18.1% | Observed: 234, 30.1% | 778          |
-|          |                      |                      |                      |                      |              |
-|          | Expected: 272.51     | Expected: 101.655    | Expected: 139.696    | Expected: 264.133    | Chi: 5.836   |
-|          |                      |                      |                      |                      |              |
-|          | Chi: 2.201           | Chi: 0.186           | Chi: 0.012           | Chi: 3.438           |              |
-+----------+----------------------+----------------------+----------------------+----------------------+--------------+
-| 1        | Observed: 971, 34.2% | Observed: 367, 12.9% | Observed: 509, 17.9% | Observed: 995, 35%   | 2842         |
-|          |                      |                      |                      |                      |              |
-|          | Expected: 995.485    | Expected: 371.344    | Expected: 510.304    | Expected: 964.866    | Chi: 1.597   |
-|          |                      |                      |                      |                      |              |
-|          | Chi: 0.602           | Chi: 0.051           | Chi: 0.003           | Chi: 0.941           |              |
-+----------+----------------------+----------------------+----------------------+----------------------+--------------+
-| All      | 1268                 | 473                  | 650                  | 1229                 | 3620         |
-|          |                      |                      |                      |                      |              |
-|          |                      |                      |                      |                      | Chisq: 7.433 |
-+----------+----------------------+----------------------+----------------------+----------------------+--------------+
++-------+----------------------+----------------------+----------------------+----------------------+--------------+
+| Voted | 0                    | 1                    | 2                    | 3                    | All          |
++=======+======================+======================+======================+======================+==============+
+| 0     | Observed: 297, 38.2% | Observed: 106, 13.6% | Observed: 141, 18.1% | Observed: 234, 30.1% | 778          |
+|       |                      |                      |                      |                      |              |
+|       | Expected: 272.51     | Expected: 101.655    | Expected: 139.696    | Expected: 264.133    | Chi: 5.836   |
+|       |                      |                      |                      |                      |              |
+|       | Chi: 2.201           | Chi: 0.186           | Chi: 0.012           | Chi: 3.438           |              |
++-------+----------------------+----------------------+----------------------+----------------------+--------------+
+| 1     | Observed: 971, 34.2% | Observed: 367, 12.9% | Observed: 509, 17.9% | Observed: 995, 35%   | 2842         |
+|       |                      |                      |                      |                      |              |
+|       | Expected: 995.485    | Expected: 371.344    | Expected: 510.304    | Expected: 964.866    | Chi: 1.597   |
+|       |                      |                      |                      |                      |              |
+|       | Chi: 0.602           | Chi: 0.051           | Chi: 0.003           | Chi: 0.941           |              |
++-------+----------------------+----------------------+----------------------+----------------------+--------------+
+| All   | 1268                 | 473                  | 650                  | 1229                 | 3620         |
+|       |                      |                      |                      |                      |              |
+|       |                      |                      |                      |                      | Chisq: 7.433 |
++-------+----------------------+----------------------+----------------------+----------------------+--------------+
 
 ```{r}
 # Degrees of freedom
