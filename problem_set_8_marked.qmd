@@ -1,0 +1,154 @@
+---
+title: "Problem Set 8"
+subtitle: "Due date: 20 November"
+format: 
+  html:
+    self-contained: true
+toc: true
+editor: visual
+execute: 
+  echo: true
+---
+
+Please upload your completed assignment to the ELMs course site (under the assignments menu). Remember to include an annotated script file for all work with R and show your math for all other problems (if applicable, or necessary). Please also upload your completed assignment to the Github repository that you have shared with us. *We should be able to run your script with no errors.*
+
+**Total points: 30**
+
+## Question 1
+
+*Points: 5*
+
+::: {.callout-tip}
+4/5
+:::
+
+For the following regression equation, $\hat{Y} = 8.5 + 6x + \epsilon$, the standard error for $\beta_0$ is 2.5, the standard error for $\beta_1$ is 3.5, and the sample size is 2000. Find the t-statistic, 95% confidence interval, and p-value (using a two-tailed test) for $\beta_1$.
+
+Is $\beta_1$ statistically significant at the 0.05-level with a two-tailed test? Why or why not?
+
+t = 6/3.5 = 1.714
+
+6+/-(1.96 \* 3.5)
+
+Lowerbound = 6 - (1.96 \* 3.5) = -.86
+
+Upperbound = 6 + (1.96 \* 3.5) = 12.86
+
+ANSWER: I would have to fail to reject the null hypothesis because my t-statistic of 1.71 is less than my critical value of 1.96. With this I can conclude that B1 is statistically significant at the .05 level.
+
+::: {.callout-tip}
+You also needed to calculate the p-value. 
+:::
+
+## Question 2
+
+*Points: 5*
+
+::: {.callout-tip}
+5/5
+:::
+
+Suppose you estimate an OLS regression and retrieve a $R^2$ value of 0.45. If the Total Sum of Squares (TSS) from that regression equals 4,700, what is the value for the Residual Sum of Squares (RSS)?
+
+Rsq = TSS-RSS/TSS
+
+-   4,700 \* (1-0.45)
+
+-   4,700 \* .55
+
+ANSWER: RSS = 2,585
+
+## Question 3
+
+*Points: 5*
+
+::: {.callout-tip}
+5/5
+:::
+
+Suppose you estimate a bivariate regression with a sample size of 102 and obtain a regression coefficient ($\beta_1$) of 5.0. What is the largest standard error that $\beta_1$ could have and still be statistically significant (i.e., reject the null hypothesis of no relationship) at the 0.05 level with a one-tailed test?
+
+-   SE(B1) = B1/T-stat
+
+-   Df = 101
+
+-   One tailed t-stat at 0.05 significance level = 1.6601
+
+-   5/1.660
+
+ANSWER: Largest standard error that B1 could have and still be statistically significant is -\> 3.012
+
+## Question 4
+
+*Points: 5*
+
+::: {.callout-tip}
+4/5
+:::
+
+Using the `states` dataset from the `poliscidata` package, produce a scatterplot of the variables `romney2012` and `hispanic10` (with `romney2012` as the dependent variable on the y-axis). Fit a regression line to the scatterplot. Describe the scatterplot and include a copy of it. Note any suspected outliers, if any (a visual inspection will suffice for this question).
+
+::: callout-note
+The variable `romney2012` measures the percentage of the state's vote that Mitt Romney received in the 2012 presidential election, and `hispanic10` indicates the percentage of the state's population that identified as Hispanic in 2010.
+:::
+
+```{r}
+library(poliscidata)
+library(ggplot2)
+
+#Scatter plot with regression line 
+ggplot(states, aes(x = hispanic10, y = romney2012)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE, color = "hotpink") +  
+  labs(title = "Scatterplot of Romney2012 vs Hispanic10",
+       x = "Population of those who identify as Hispanic (percentage in 2010)",
+       y = "Percentage of Romney votes in 2012")
+```
+
+ANSWER: There is a negative slope, as my DV Romney votes in 2012 tends to decrease as my IV Hispanic population in 2010 increases.
+
+-   The scatter plot displays a downward trend, as the population of those who identify as Hispanic increases, Romney votes in 2012 decreases.
+-   Romney got the most votes when the percentage of the population of those who identify as Hispanic in 2010 was between 0-10%. As the percentage increases, Romney votes decrease.
+
+::: {.callout-tip}
+Any suspected outliers? 
+:::
+
+## Question 5
+
+*Points: 10*
+
+::: {.callout-tip}
+9/10
+:::
+
+Estimate a bivariate regression with `romney2012` as the dependent variable and `hispanic10` as the independent variable and report the results in a professionally formatted table. In as much detail as possible, describe (and interpret) the regression results.
+
+```{r}
+library(modelsummary)
+library(stargazer)
+
+#fit bivariate regression model 
+regress5 <- lm(romney2012 ~ hispanic10, data = states)
+
+regress5
+
+stargazer(regress5, type = "text")
+summary(regress5)
+```
+
+::: {.callout-tip}
+Please change your coefficient label to something more meaningful for your reader. 
+:::
+
+-   Before I look at the results, I know from what we see on the scatter-plot that there is a negative slope, as my DV Romney votes in 2012 tends to decrease as my IV Hispanic population in 2010 increases. This gives me an idea of what I may see in these results.
+
+-   The p-value for the population of those who identifiy as Hispanic is 0.182 and is much larger than any of our critical values.
+
+-   Coefficient moves in a negative way. The results shows a negative linear relationship, for hispanic10 the coefficient is -0.196 and not statistically significant at 0.001, 0.01 and 0.05 because the p-value of 0.182 is way greater than any of our critical value
+
+-   R-squared: 0.0368, is a very low value which shows a small variation in the proportion of population that identifies as Hispanic and votes for Romney. Only 3.68% of the variability in the dependent variable is explained by the independent variable in this model. Even though in the scatter plot it seems there might be a negative correlation, with this small variation we cannot determine causation.
+
+-   Residual Standard Error: 10.12 on 48 degrees of freedom. This provides an estimate of the variability on the actual vote share around the predicted values.
+
+-   The t-value of -1.34 is lower than any of our critical values. This shows us that our value is not statistically significant at any of our significance levels (0.01, 0.05 and .1)
