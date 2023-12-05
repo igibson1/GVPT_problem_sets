@@ -20,23 +20,127 @@ Please upload your completed assignment to the ELMs course site (under the assig
 
 Table 1 below reports the results from two regression models. In Model 1, in Table 1, $Y$ is regressed on $X_1$ and, in Model 2, $Y$ is regressed on both $X_1$ and $X_2$. Why might $X_1$ be statistically significant at conventional levels in Model 1 but statistically insignificant in Model 2? Be as specific as possible.
 
+![](images/PS9%20Table%20Q1-02.png){width="374"}
+
+ANSWER: The reason that X1 might be statistically significant at conventional levels in Model 1 but statistically insignificant in Model 2 could be due to
+
+-   Sample size: If the sample size is too small, additional variables could increase the standard error and effect the coefficient estimates
+
+-   Additive & Interactive Effects: If the effect of X1 on Y changes across different values of X2, then there is an interactive effect of X1 and X2
+
+    -   If the relationship between X1 and X2 depends on the level of X2, this could not be seen in Model 1 but seen in Model 1. The effect of X1 on Y is conditional on X2
+
+-   If the relationship between X1 and Y is entirely driven by lurking variable Z, and we control for Z, we should not find statistical significance in Model 1
+
+-   Collinearity: Adding X2 to the model could bring multicollinearity as an issue if X1 and X2 are highly correlated. This can make it hard to detect individual effects of the variables
+
 ## Question 2
 
 *Points: 10*
 
-Using the `censusAggregate` dataset (posted on ELMs) — which is survey data aggregated to the state level (1972-2000) — estimate a regression with `vote` as the dependent variable and the following independent variables: `nonSouth`, `edr`, and `pcthsg`. Report the results in a professionally formatted table and interpret the regression results. 
+Using the `censusAggregate` dataset (posted on ELMs) --- which is survey data aggregated to the state level (1972-2000) --- estimate a regression with `vote` as the dependent variable and the following independent variables: `nonSouth`, `edr`, and `pcthsg`. Report the results in a professionally formatted table and interpret the regression results.
 
-Also, create a figure to display the predicted values (with confidence intervals) for the effect of `pcthsg` on the turnout rate. Lastly, is it meaningful to interpret the constant term on its own? Why, or why not?
+Also, create a figure to display the predicted values (with confidence intervals) for the effect of pcthsg on the turnout rate. Lastly, is it meaningful to interpret the constant term on its own? Why, or why not?
 
-::: {.callout-note}
-`vote` is the turnout rate in a state in a given year (i.e., the number of people who voted divided by the number eligible to vote). 
+::: callout-note
+`vote` is the turnout rate in a state in a given year (i.e., the number of people who voted divided by the number eligible to vote). - DV
 
-`nonSouth` is a dummy variable equal to `0` for Southern states and a `1` for non-Southern states. 
+`nonSouth` is a dummy variable equal to `0` for Southern states and a `1` for non-Southern states. - IV
 
-`pcthsg` is the percentage of the population in a state that graduated high school. 
+`pcthsg` is the percentage of the population in a state that graduated high school. - IV
 
-`edr` is a dummy variable equal to `1` for states that used election-day registration and a `0` for states without election-day registration.
+`edr` is a dummy variable equal to `1` for states that used election-day registration and a `0` for states without election-day registration. - IV
 :::
+
+```{r}
+library(tidyverse)
+library(knitr)
+library(broom)
+library(modelsummary)
+library(stargazer)
+library(readr)
+library(marginaleffects)
+library(plotly)
+censusAggregate <- read_csv("~/Desktop/GVPT 622 Lab/censusAggregate.csv")
+View(censusAggregate)
+```
+
+```{r}
+#censusAggregate is your dataset
+#Voter Turn Out, 'nonSouth'- Non-Southern States, 'edr'- States with Election-day Registration and 'pcthsg'- Percentage of the Population that graduated HS 
+
+# Run the regression
+reg_model <- lm(vote ~ nonSouth + edr + pcthsg, data = censusAggregate)
+
+summary(reg_model)
+
+#Tidy up the results using broom
+tidy_results <- tidy(reg_model)
+tidy_results
+
+#Create a professionally formatted table using stargazer
+custom_names <- c("Non-South", "Election Day Registration", "Highschool Graduate")
+stargazer(reg_model, type = "text", 
+          title = "Regression Results",
+          covariate.labels = custom_names,
+          align = TRUE, 
+          single.row = TRUE, # Combine standard errors and p-values in a single row
+          star.cutoffs = c(0.05, 0.01, 0.001), # Add significance stars
+          digits = 3 # Set the number of digits to display
+)
+
+
+modelsummary(reg_model,
+            coef_rename = c(nonSouth = "Non-Southern States",
+                            edr = "States with Election-day Registration",
+                            pcthsg = "Percentage of the Population that graduated HS"),
+             statistic = c("t = {statistic}", "SE = {std.error}", "conf.int", "p.value"))
+```
+
+Interpret Regression Results: They suggest associations but do not necessarily mean there is causation.
+
+-   The regression results show that being from a Non-southern state is associated with a 5.546 in the voter turnout rate, and statistically significant at the 0.01 level. Election day registration is associated with an increase of 5.792 in the turnout rate and is statistically significant at the .01 level. The percentage of the population that graduated HS is associated with a 0.101 increase in the turnout rate and is statistically significant at the .01 level.
+
+-   Coefficient:
+
+    -   Intercept: is at 54.002
+
+        -   nonSouth: 5.546, being from South (nonsouth=0) is associated with a 5.55 unit increase in the estimated turnout rate compared to nonsouth.
+
+        -   edr: 5.792, a one unit increase in states that used election-day registration (states without election-day registration=0) is associated with a 5.79 unit increase in the estimated turnout rate.
+
+        -   pcthsg: 0.101, a one unit increase in the percentage of the population in a state that graduated high school is associated with a 0.10 unit increase in the estimated turnout rate.
+
+        -   All are statistically significant at the .05 level
+
+-   R-Squared: .281 is not a large value, which shows a minimal variation in the proportion of DV. Only 28.1 of the variability in the dependent variables is explained by the independent variable
+
+    -   Model explains about 28.1% of the variance in the turnout rate.
+
+-   Residual Std. Error: 5.652 on 353 degrees of freedom. This provides an estimate of the variability on the actual voter turn out around the predicted values
+
+-   p-value: 2e-16 is extremely low and shows us that there is strong evidence against the null hypothesis. This suggests that at our DVs are statistically significant
+
+    -   nonSouth: 1.68e-11 is very close to 0 and less than our significance level, resulting in being statistically significant and reject the null hypothesis
+
+    -   edr: 7.99e-08 is very close to 0 and less than our significance level, resulting in being statistically significant and reject the null hypothesis
+
+    -   pcthsg: 0.00561 is low and less than our significance level, resulting in being statistically significant and reject the null hypothesis
+
+-   F-statistic: 46.049 shows us the statistics test of the overall significance of the model.
+
+-   Lastly, it is not meaningful to interpret the constant on its own because it is more significant and meaningful to interpret the intercept with other coefficients of other variables in the model to see how the DV changes relative to a baseline.
+
+-   The constant term is the expected turnout rate when all IVs are 0. It is not meaningful to interpret it on its own because it doesn't have a practical reason to do so either. It wouldn't be helpful in a real world scenario, we need context not just the constant by itself to understand it. Interpreting the constant without the other variables could also lead to misinterpretations of the study.
+
+```{r}
+
+#predicted regression plot 
+plot_predictions(reg_model, condition = "pcthsg")
+
+```
+
+<!-- -->
 
 ## Question 3
 
@@ -44,8 +148,69 @@ Also, create a figure to display the predicted values (with confidence intervals
 
 Using the regression results from the previous question, evaluate the null hypothesis that the effects (i.e., regression coefficients) of `nonSouth` and `pcthsg` are jointly equal to zero. Can you reject the null hypothesis? Be sure to demonstrate how you reached a definitive conclusion.
 
+ANSWER:
+
+-   Null Hypothesis: Bnonsouth=Bpcthsg= jointly 0
+
+-   Alternative Hypothesis: At least one of the variables is not = 0
+
+```{=html}
+<!-- -->
+```
+-   The p-value is still extremely low and suggest strong evidence against the null hypothesis that the effects of Non-Southern States and Percentage of the Population that graduated HS are jointly equal to 0, meaning that these predictors significantly improve the model fit compared to the model with only the States with Election-day Registration.
+
+-   I would reject the null hypothesis
+
+-   Based on the regression results from the previous question, the p-values is significantly lower than the significance level of .05, we can reject the null hypothesis. Because the relationship between nonsouth and pcthsg in predicting the DV is statistically significant we can use the p-value to come to a conclusion that at least one of the variables is not equal to 0.
+
 ## Question 4
 
 *Points: 15*
 
 Using one of the other datasets available in the `poliscidata` package pick one dependent variable and two or more independent variables. Run a regression of the dependent variable on the independent variables. In your answer, describe why you picked the variables you did, produce a professionally formatted results table, and describe your statistical and substantive findings.
+
+```{r}
+states <- read_csv("~/Desktop/GVPT 622 Lab/states.csv")
+?states
+#obama08 - percent voting for obama 2008 _ DV
+#permit - percent public would always permit abortion (2004) - IV
+#relig_import - 
+
+#Run the regression
+reg_model4 <- lm(obama08 ~ permit + relig_import, data = states)
+
+summary(reg_model4)
+
+#Tidy up the results using broom
+tidy_results4 <- tidy(reg_model4)
+tidy_results4
+
+#Create a professionally formatted table using stargazer
+custom_names <- c("Percentage of those who Permits Abortion", "Percentage of Religion being a great deal of guidance")
+stargazer(reg_model4, type = "text", 
+          title = "Regression Results",
+          covariate.labels = custom_names,
+          align = TRUE, # Align coefficients
+          single.row = TRUE, # Combine standard errors and p-values in a single row
+          star.cutoffs = c(0.05, 0.01, 0.001), # Add significance stars
+          digits = 3 # Set the number of digits to display
+)
+
+
+```
+
+Hypothesis: This study analyzes the relationship between those who voted for Obama in 2008, those who permit abortion and those who use religion as form of guidance. I hypothesis that the percentage of those who voted for Obama in 2008 will be in favor of permitting abortion policy and will not use religion for a great deal of guidance.
+
+Null (H0) Hypothesis: There is no significant relationship between those who voted for Obama in 2008 and being in favor of permitting abortion policy and will not use religion for a great deal of guidance.
+
+-   Based off of my hypothesis, I picked the voting for Obama in 2008 as my dependent variable and looked for whether abortion policy and religion as a guide, to get a better look into the demographics of the population of Obama voters.
+
+Regression Results
+
+-   The model suggest that the percentage of those who permit abortion is a statistically significant predictor of my DV (Those who voted for Obama in 2008) and the percentage of those where religion is a great deal fo guidance is not statistically significant at the 0.01 level.
+
+-   R-squared: .425, this shows us that about 42.5% of the variability in the DV is explained by the model
+
+-   F-Stat: The F stat is 12.939 with df of 2; 35 and the associated p-value is less than .001 which shows us at least one of the predictor variable is significantly related to the DV.
+
+-   The model as a whole is statistically significant in predicting the DV
